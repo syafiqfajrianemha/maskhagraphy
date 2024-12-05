@@ -33,7 +33,7 @@ class AuthenticatedSessionController extends Controller
         } else {
             // Auth::guard('web')->logout();
             // return redirect()->route('login')->with('status', 'You are not authorized to access this page.');
-            return redirect()->route('beranda.index');
+            return redirect()->route('home.index');
         }
         // return redirect()->intended(route('dashboard', absolute: false));
     }
