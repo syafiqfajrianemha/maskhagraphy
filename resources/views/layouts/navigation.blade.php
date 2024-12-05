@@ -43,10 +43,6 @@
                             {{ __('Profile') }}
                         </x-dropdown-link>
 
-                        <x-dropdown-link :href="route('profile.edit')">
-                            {{ __('Logo') }}
-                        </x-dropdown-link>
-
                         <hr class="mx-3">
 
                         <!-- Authentication -->
