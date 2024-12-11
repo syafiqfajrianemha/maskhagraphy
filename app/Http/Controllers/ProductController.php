@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
@@ -51,7 +52,7 @@ class ProductController extends Controller
             'description' => $request->description,
         ]);
 
-        return redirect()->route('product.index');
+        return redirect()->route('product.index')->with('message', 'Product has been created');
     }
 
     /**
@@ -81,8 +82,13 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Product $product)
+    public function destroy($id)
     {
-        //
+        $product = Product::find($id);
+
+        File::delete('storage/files/images/' . $product->image);
+        Product::destroy($product->id);
+
+        return redirect()->route('product.index')->with('message', 'Product has been deleted');
     }
 }
