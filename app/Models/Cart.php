@@ -4,11 +4,16 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Cart extends Model
 {
     protected $guarded = ['id'];
 
-    public function cartItems()
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function items()
     {
         return $this->hasMany(CartItem::class);
     }

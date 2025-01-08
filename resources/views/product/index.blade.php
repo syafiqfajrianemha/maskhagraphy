@@ -37,9 +37,9 @@
                                     <td class="px-6 py-4 text-sm text-gray-700">Rp. {{ number_format($product->price, 0, '.', '.') }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-700">{{ $product->description === null ? '-' : $product->description }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-700">
-                                        {{-- <x-primary-href :href="route('product.edit', $product->id)" class="mb-2">
+                                        <x-primary-href :href="route('product.edit', $product->id)" class="mb-2">
                                             {{ __('Edit') }}
-                                        </x-primary-href> --}}
+                                        </x-primary-href>
                                         <form action="{{ route('product.destroy', $product->id) }}" method="POST" class="form-delete">
                                             @csrf
                                             @method('DELETE')

@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Edit Product') }}
+            {{ __('Add Product') }}
         </h2>
     </x-slot>
 
@@ -14,25 +14,25 @@
 
                         <div>
                             {{-- <x-input-label for="image" :value="__('Image')" /> --}}
-                            <img src="{{ asset('images/default-image.jpg') }}" alt="default-image" class="img-thumbnail img-preview" width="100">
+                            <img src="{{ asset('storage/files/images/' . $product->image) }}" alt="photo of {{ $product->image }}" class="img-thumbnail img-preview" width="100">
                             <input type="file" name="image" id="image" onchange="previewImage()" class="mt-1 block w-full file:py-1 file:px-2 file:rounded-full file:border-0 file:bg-violet-50 file:text-violet-700" required>
                             <x-input-error class="mt-2" :messages="$errors->get('image')" />
                         </div>
 
                         <div class="mt-4">
                             <x-input-label for="price" :value="__('Price')" />
-                            <x-text-input id="price" name="price" type="number" min="0" class="mt-1 block w-full" :value="old('price')" required />
+                            <x-text-input id="price" name="price" type="number" min="0" class="mt-1 block w-full" :value="$product->price" required />
                             <x-input-error class="mt-2" :messages="$errors->get('price')" />
                         </div>
 
                         <div class="mt-4">
                             <x-input-label for="description" :value="__('Description')" />
-                            <textarea id="description" name="description" rows="4" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ old('description') }}</textarea>
+                            <textarea id="description" name="description" rows="4" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">{{ $product->description }}</textarea>
                             <x-input-error class="mt-2" :messages="$errors->get('description')" />
                         </div>
 
                         <div class="flex items-center mt-5">
-                            <x-primary-button>{{ __('Save') }}</x-primary-button>
+                            <x-primary-button>{{ __('Edit') }}</x-primary-button>
                         </div>
                     </form>
                 </div>
