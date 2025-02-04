@@ -51,11 +51,11 @@
                                 </x-slot>
 
                                 <x-slot name="content">
-                                    {{-- <x-dropdown-link :href="route('profile.edit')">
-                                        {{ __('Profile') }}
-                                    </x-dropdown-link> --}}
+                                    <x-dropdown-link :href="route('collections.index')">
+                                        {{ __('Collections') }}
+                                    </x-dropdown-link>
 
-                                    {{-- <hr class="mx-3"> --}}
+                                    <hr class="mx-3">
 
                                     <!-- Authentication -->
                                     <form method="POST" action="{{ route('logout') }}">

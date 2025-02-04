@@ -2,9 +2,9 @@
 
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\HomeController;
-use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Middleware\RoleCheck;
 use Illuminate\Support\Facades\Route;
 
@@ -42,7 +42,10 @@ Route::middleware(['auth', RoleCheck::class.':admin,user'])->group(function () {
     Route::patch('/cart/update/{cartItem}', [CartController::class, 'updateCart'])->name('cart.update');
     Route::delete('/cart/remove/{cartItem}', [CartController::class, 'removeFromCart'])->name('cart.remove');
 
-    Route::post('/payment/{cartId}/create', [PaymentController::class, 'createPayment'])->name('payment.create');
+    Route::get('/payment-success', [CartController::class, 'paymentSuccess'])->name('payment.success');
+
+    Route::get('/purchases', [PurchaseController::class, 'purchaseIndex'])->name('purchase.index');;
+    Route::get('/collections', [PurchaseController::class, 'collectionIndex'])->name('collections.index');;
 });
 
 require __DIR__.'/auth.php';

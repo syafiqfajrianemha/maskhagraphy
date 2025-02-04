@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Product;
+use App\Models\Purchase;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 
@@ -17,27 +19,32 @@ class CartController extends Controller
             return $item->quantity * $item->product->price;
         }) : 0;
 
-        // Set your Merchant Server Key
-        \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-        // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
-        \Midtrans\Config::$isProduction = false;
-        // Set sanitization on (default)
-        \Midtrans\Config::$isSanitized = true;
-        // Set 3DS transaction for credit card to true
-        \Midtrans\Config::$is3ds = true;
+        $snapToken = null;
 
-        $params = array(
-            'transaction_details' => array(
-                'order_id' => Str::random(15),
-                'gross_amount' => $totalPrice,
-            ),
-            'customer_details' => array(
-                'name' => auth()->user()->name,
-                'handphone' => "-",
-            ),
-        );
+        if ($totalPrice >= 0.01) {
+            // Set your Merchant Server Key
+            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+            // Set to Development/Sandbox Environment (default). Set to true for Production Environment (accept real transaction).
+            \Midtrans\Config::$isProduction = false;
+            // Set sanitization on (default)
+            \Midtrans\Config::$isSanitized = true;
+            // Set 3DS transaction for credit card to true
+            \Midtrans\Config::$is3ds = true;
 
-        $snapToken = \Midtrans\Snap::getSnapToken($params);
+            $params = array(
+                'transaction_details' => array(
+                    'order_id' => Str::random(15),
+                    'gross_amount' => $totalPrice,
+                ),
+                'customer_details' => array(
+                    'name' => auth()->user()->name,
+                    'email' => auth()->user()->email,
+                    'handphone' => "-",
+                ),
+            );
+
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+        }
 
         return view('cart.index', compact('cart', 'totalPrice', 'snapToken'));
     }
@@ -72,5 +79,33 @@ class CartController extends Controller
         ]);
 
         return redirect()->route('cart.index')->with('message', 'Product added to cart.');
+    }
+
+    public function paymentSuccess(Request $request)
+    {
+        $user = $request->user();
+
+        $cart = Cart::where('user_id', $user->id)->first();
+
+        if (!$cart) {
+            return response()->json(['message' => 'Cart not found'], 404);
+        }
+
+        foreach ($cart->items as $item) {
+            // Masukkan data ke tabel purchase
+            Purchase::create([
+                'user_id' => $user->id,
+                'product_id' => $item->product_id,
+                'purchased_at' => now(),
+            ]);
+
+            // Ubah status produk menjadi "unavailable"
+            $product = Product::find($item->product_id);
+            $product->update(['status' => 'unavailable']);
+        }
+
+        $cart->delete();
+
+        return redirect()->route('cart.index')->with('message', 'Payment processed successfully.');
     }
 }
