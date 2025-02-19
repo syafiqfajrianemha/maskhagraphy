@@ -17,45 +17,6 @@
 
                     <div class="mt-5">
                         <ul role="list" class="-my-6 divide-y divide-gray-200">
-                            {{-- @forelse ($cart->items as $item)
-                            <li class="flex py-6">
-                                <div class="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                    <img src="{{ asset('storage/files/images/' . $item->product->image) }}"
-                                        alt="image {{ $item->product->image }}" class="size-full object-cover">
-                                </div>
-
-                                <div class="ml-4 flex flex-1 flex-col">
-                                    <div>
-                                        <div class="flex justify-between text-base font-medium text-gray-900">
-                                            <h3>
-                                                <a href="#">{{ $item->product->image }}</a>
-                                            </h3>
-                                            <p class="ml-4">Rp.
-                                                {{ number_format($item->product->price, 0, '.', '.') }}
-                                            </p>
-                                        </div>
-                                        <p class="mt-1 text-sm text-gray-500">{{ $item->product->description }}</p>
-                                    </div>
-                                    <div class="flex flex-1 items-end justify-between text-sm">
-                                        <p class="text-gray-500">Qty {{ $item->quantity }}</p>
-
-                                        <div class="flex">
-                                            <form action="{{ route('cart.remove', $item) }}" method="POST">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit"
-                                                    class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
-                                            </form>
-                                        </div>
-                                    </div>
-                                </div>
-                            </li>
-                            @empty
-                            <p class="mt-10 mb-6 text-red-500">Your cart is empty. <a class="text-blue-500"
-                                    href="{{ route('home.index') }}">Shop Now<span aria-hidden="true">
-                                        &rarr;</span></a>
-                            </p>
-                            @endforelse --}}
                             @if ($cart && $cart->items->count())
                                 @foreach ($cart->items as $item)
                                     <li class="flex py-6">
@@ -129,13 +90,7 @@
         payButton.addEventListener('click', function () {
             window.snap.pay('{{ $snapToken }}', {
                 onSuccess: function (result) {
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Payment Success!',
-                        text: 'Your payment has been processed successfully.',
-                    }).then(() => {
-                        window.location.replace("{{ route('payment.success') }}");
-                    });
+                    window.location.replace("{{ route('payment.success') }}");
                 },
                 onPending: function (result) {
                     alert("Waiting for your payment!");

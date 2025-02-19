@@ -37,9 +37,8 @@ class CartController extends Controller
                     'gross_amount' => $totalPrice,
                 ),
                 'customer_details' => array(
-                    'name' => auth()->user()->name,
+                    'first_name' => auth()->user()->name,
                     'email' => auth()->user()->email,
-                    'handphone' => "-",
                 ),
             );
 
@@ -92,14 +91,12 @@ class CartController extends Controller
         }
 
         foreach ($cart->items as $item) {
-            // Masukkan data ke tabel purchase
             Purchase::create([
                 'user_id' => $user->id,
                 'product_id' => $item->product_id,
                 'purchased_at' => now(),
             ]);
 
-            // Ubah status produk menjadi "unavailable"
             $product = Product::find($item->product_id);
             $product->update(['status' => 'unavailable']);
         }
