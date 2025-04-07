@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CartController;
+use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
@@ -20,9 +21,7 @@ Route::get('/home', [HomeController::class, 'index'])->name('home.index');
 // })->middleware(['auth', 'verified', RoleCheck::class.':admin'])->name('dashboard');
 
 Route::middleware(['auth', RoleCheck::class.':admin'])->group(function () {
-    Route::get('/dashboard', function() {
-        return view('dashboard');
-    })->name('dashboard');
+    Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -31,6 +30,7 @@ Route::middleware(['auth', RoleCheck::class.':admin'])->group(function () {
     Route::get('/product', [ProductController::class, 'index'])->name('product.index');
     Route::get('/product/create', [ProductController::class, 'create'])->name('product.create');
     Route::get('/product/{id}', [ProductController::class, 'edit'])->name('product.edit');
+    Route::get('/product/status/filter', [ProductController::class, 'statusFilter'])->name('product.status.filter');
     Route::post('/product', [ProductController::class, 'store'])->name('product.store');
     // Route::patch('/product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::delete('product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');

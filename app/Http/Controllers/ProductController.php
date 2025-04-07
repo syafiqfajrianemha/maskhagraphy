@@ -14,8 +14,10 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        return view('product.index', compact('products'));
+        $limit = 10;
+        $products = Product::orderBy('id', 'desc')->paginate($limit);
+        $no = $limit * ($products->currentPage() - 1);
+        return view('product.index', compact('products', 'no'));
     }
 
     /**
@@ -92,5 +94,14 @@ class ProductController extends Controller
         Product::destroy($product->id);
 
         return redirect()->route('product.index')->with('message', 'Product has been deleted');
+    }
+
+    public function statusFilter(Request $request)
+    {
+        $limit = 10;
+        $products = Product::where('status', $request->status)->paginate($limit);
+        $no = $limit * ($products->currentPage() - 1);
+
+        return view('product._list', compact('products', 'no'));
     }
 }
