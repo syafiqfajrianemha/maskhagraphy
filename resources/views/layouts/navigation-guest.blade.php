@@ -21,6 +21,15 @@
                         {{ __('Booking') }}
                     </x-nav-link>
                 </div>
+                @if (Route::has('login'))
+                    @auth
+                        <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                            <x-nav-link :href="route('collections.index')" :active="request()->routeIs('collections.index')">
+                                {{ __('Collections') }}
+                            </x-nav-link>
+                        </div>
+                    @endauth
+                @endif
             </div>
 
             <!-- Settings Dropdown -->
