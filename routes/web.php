@@ -1,11 +1,13 @@
 <?php
 
+use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\ServiceController;
 use App\Http\Middleware\RoleCheck;
 use Illuminate\Support\Facades\Route;
 
@@ -34,6 +36,11 @@ Route::middleware(['auth', RoleCheck::class.':admin'])->group(function () {
     Route::post('/product', [ProductController::class, 'store'])->name('product.store');
     // Route::patch('/product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::delete('product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
+
+    Route::get('/service', [ServiceController::class, 'index'])->name('service.index');
+
+    Route::get('/booking-list', [BookingController::class, 'bookingList'])->name('booking.list');
+    Route::post('/booking-list/{id}', [BookingController::class, 'update'])->name('booking.update');
 });
 
 Route::middleware(['auth', RoleCheck::class.':admin,user'])->group(function () {
@@ -46,6 +53,9 @@ Route::middleware(['auth', RoleCheck::class.':admin,user'])->group(function () {
 
     Route::get('/purchases', [PurchaseController::class, 'purchaseIndex'])->name('purchase.index');;
     Route::get('/collections', [PurchaseController::class, 'collectionIndex'])->name('collections.index');;
+
+    Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
+    Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
 });
 
 require __DIR__.'/auth.php';

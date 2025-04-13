@@ -26,6 +26,16 @@
                         {{ __('Purchase') }}
                     </x-nav-link>
                 </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('service.index')" :active="request()->routeIs('service.index')">
+                        {{ __('Service') }}
+                    </x-nav-link>
+                </div>
+                <div class="hidden space-x-8 sm:-my-px sm:ms-10 sm:flex">
+                    <x-nav-link :href="route('booking.list')" :active="request()->routeIs('booking.list')">
+                        {{ __('Booking') }}
+                    </x-nav-link>
+                </div>
             </div>
 
             <!-- Settings Dropdown -->
