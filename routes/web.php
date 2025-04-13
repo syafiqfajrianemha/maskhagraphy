@@ -37,7 +37,7 @@ Route::middleware(['auth', RoleCheck::class.':admin'])->group(function () {
     // Route::patch('/product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::delete('product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
 
-    Route::get('/service', [ServiceController::class, 'index'])->name('service.index');
+    Route::resource('/service', ServiceController::class);
 
     Route::get('/booking-list', [BookingController::class, 'bookingList'])->name('booking.list');
     Route::post('/booking-list/{id}', [BookingController::class, 'update'])->name('booking.update');

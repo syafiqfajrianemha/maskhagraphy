@@ -21,7 +21,7 @@ class ServiceController extends Controller
      */
     public function create()
     {
-        //
+        return view('service.create');
     }
 
     /**
@@ -29,7 +29,19 @@ class ServiceController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'description' => 'nullable',
+        ]);
+
+        Service::create([
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('service.index')->with('message', 'Service has been created');
     }
 
     /**
@@ -45,7 +57,8 @@ class ServiceController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $service = Service::findOrFail($id);
+        return view('service.edit', compact('service'));
     }
 
     /**
@@ -53,7 +66,21 @@ class ServiceController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'price' => 'required|numeric',
+            'description' => 'nullable',
+        ]);
+
+        $service = Service::findOrFail($id);
+
+        $service->update([
+            'name' => $request->name,
+            'price' => $request->price,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('service.index')->with('message', 'Service has been updated');
     }
 
     /**
@@ -61,6 +88,9 @@ class ServiceController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $service = Service::findOrFail($id);
+        Service::destroy($service->id);
+
+        return redirect()->route('service.index')->with('message', 'Service has been deleted');
     }
 }

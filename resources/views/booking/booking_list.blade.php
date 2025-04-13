@@ -19,6 +19,7 @@
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">WhatsApp</th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Date</th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Time</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Rejected Note</th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Action</th>
                             </tr>
@@ -32,11 +33,23 @@
                                     <td class="px-6 py-4 text-sm text-gray-700">{{ $booking->phone }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-700">{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-700">{{ \Carbon\Carbon::parse($booking->booking_time)->format('H:i') }}</td>
-                                    @if ($booking->status === 'rejected')
-                                        <td class="px-6 py-4 text-sm text-gray-700">{{ $booking->note ?? '-' }}</td>
-                                    @else
-                                        <td class="px-6 py-4 text-sm text-gray-700">-</td>
+                                    @if ($booking->status === 'waiting')
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        <span class="bg-yellow-100 py-1 px-2 rounded-md">Waiting</span>
+                                    </td>
+                                    @elseif ($booking->status === 'approved')
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        <span class="bg-green-100 py-1 px-2 rounded-md">Approved</span>
+                                    </td>
+                                    @elseif ($booking->status === 'rejected')
+                                    <td class="px-6 py-4 text-sm text-gray-700">
+                                        <span class="bg-red-100 py-1 px-2 rounded-md">Rejected</span>
+                                    </td>
                                     @endif
+                                    @if ($booking->status === 'rejected')
+                                        <td class="px-6 py-4 text-sm text-gray-700">{{ $booking->note }}</td>
+                                    @endif
+                                    @if ($booking->status === 'waiting')
                                     <td class="px-6 py-4 text-sm text-gray-700">
                                         <form action="{{ route('booking.update', $booking->id) }}" method="POST" class="form-approved">
                                             @csrf
@@ -50,6 +63,7 @@
                                             <button type="submit" class="px-4 py-2 bg-gray-800 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 transition ease-in-out duration-150 cursor-pointer">Reject</button>
                                         </form>
                                     </td>
+                                    @endif
                                 </tr>
                             @empty
                                 <tr class="border-b hover:bg-gray-50">

@@ -99,7 +99,18 @@ class ProductController extends Controller
     public function statusFilter(Request $request)
     {
         $limit = 10;
-        $products = Product::where('status', $request->status)->paginate($limit);
+
+        $query = Product::query();
+
+        if ($request->status) {
+            $query->where('status', $request->status);
+        }
+
+        if ($request->description) {
+            $query->where('description', 'like', '%' . $request->description . '%');
+        }
+
+        $products = $query->paginate($limit);
         $no = $limit * ($products->currentPage() - 1);
 
         return view('product._list', compact('products', 'no'));

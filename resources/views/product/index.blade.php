@@ -12,15 +12,20 @@
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
                     <div class="text-gray-900 flex justify-between items-center">
+                        <div class="flex gap-2">
+                            <input type="text" id="descriptionSearch" placeholder="Search"
+                                   class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" />
+
+                            <select id="statusFilter" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
+                                <option selected disabled>Filter by Status</option>
+                                <option value="available">Available</option>
+                                <option value="unavailable">Unavailable</option>
+                            </select>
+                        </div>
+
                         <x-primary-href :href="route('product.create')">
                             {{ __('Add Product') }}
                         </x-primary-href>
-
-                        <select id="statusFilter" class="border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm">
-                            <option selected disabled>Filter by Status</option>
-                            <option value="available">Available</option>
-                            <option value="unavailable">Unavailable</option>
-                        </select>
                     </div>
 
                     <div id="productList">
@@ -38,13 +43,14 @@
 
         <script>
             $(document).ready(function() {
-                $('#statusFilter').on('change', function() {
-                    const status = $(this).val();
+                function fetchProducts() {
+                    const status = $('#statusFilter').val();
+                    const description = $('#descriptionSearch').val();
 
                     $.ajax({
                         url: '{{ route("product.status.filter") }}',
                         type: 'GET',
-                        data: { status },
+                        data: { status, description },
                         success: function(response) {
                             $('#productList').html(response);
                         },
@@ -52,6 +58,13 @@
                             alert('Terjadi kesalahan saat memuat data');
                         }
                     });
+                }
+
+                $('#statusFilter').on('change', fetchProducts);
+                $('#descriptionSearch').on('keyup', function() {
+                    clearTimeout($.data(this, 'timer'));
+                    const wait = setTimeout(fetchProducts, 500);
+                    $(this).data('timer', wait);
                 });
             });
         </script>
