@@ -11,7 +11,7 @@
                         <div class="p-4 mb-3 border rounded-md shadow-sm bg-gray-50">
                             <p><strong>Layanan:</strong> {{ $booking->service->name }}</p>
                             <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</p>
-                            <p><strong>Waktu:</strong> {{ \Carbon\Carbon::parse($booking->booking_time)->format('H:i') }}</p>
+                            <p><strong>Waktu:</strong> {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }}-{{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}</p>
                             <p><strong>Status:</strong> @if ($booking->status == 'waiting')
                                 <span class="bg-yellow-100 py-1 px-2 rounded-md">Waiting</span>
                             @endif
@@ -64,9 +64,15 @@
                         </div>
 
                         <div class="mt-4">
-                            <x-input-label for="booking_time" :value="__('Waktu Booking')" />
-                            <x-text-input id="booking_time" name="booking_time" type="time" class="mt-1 block w-full" :value="old('booking_time')" required />
-                            <x-input-error class="mt-2" :messages="$errors->get('booking_time')" />
+                            <x-input-label for="start_time" :value="__('Jam Mulai')" />
+                            <x-text-input id="start_time" name="start_time" type="time" class="mt-1 block w-full" :value="old('start_time')" required />
+                            <x-input-error class="mt-2" :messages="$errors->get('start_time')" />
+                        </div>
+
+                        <div class="mt-4">
+                            <x-input-label for="end_time" :value="__('Jam Selesai')" />
+                            <x-text-input id="end_time" name="end_time" type="time" class="mt-1 block w-full" :value="old('end_time')" required />
+                            <x-input-error class="mt-2" :messages="$errors->get('end_time')" />
                         </div>
 
                         <div class="flex items-center mt-5">

@@ -16,7 +16,8 @@ use Illuminate\Support\Facades\Route;
 // })->name('welcome');
 Route::redirect('/', '/home', 301);
 
-Route::get('/home', [HomeController::class, 'index'])->name('home.index');
+Route::get('/home', [HomeController::class, 'search'])->name('home.index');
+Route::get('/search', [HomeController::class, 'search'])->name('home.search');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

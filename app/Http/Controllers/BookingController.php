@@ -22,7 +22,8 @@ class BookingController extends Controller
             'service_id' => 'required|exists:services,id',
             'phone' => 'required|numeric',
             'booking_date' => 'required|date',
-            'booking_time' => 'required',
+            'start_time' => 'required',
+            'end_time' => 'required',
         ]);
 
         Booking::create([
@@ -30,7 +31,8 @@ class BookingController extends Controller
             'user_id' => Auth::id(),
             'phone' => $request->phone,
             'booking_date' => $request->booking_date,
-            'booking_time' => $request->booking_time,
+            'start_time' => $request->start_time,
+            'end_time' => $request->end_time,
         ]);
 
         return redirect()->route('booking.index')->with('message', 'Booking has been created');
@@ -62,6 +64,27 @@ class BookingController extends Controller
         ]);
 
         $status = $request->status === 'approved' ? 'Disetujui' : 'Ditolak';
+
+        if ($request->status === 'approved') {
+            $phone = $booking->phone;
+            if (str_starts_with($phone, '0')) {
+                $phone = '62' . substr($phone, 1);
+            }
+
+            $tanggal = \Carbon\Carbon::parse($booking->booking_date)->format('d M Y');
+            $jam = \Carbon\Carbon::parse($booking->start_time)->format('H:i') . ' - ' . \Carbon\Carbon::parse($booking->end_time)->format('H:i');
+
+            $message = "Booking Kamu Telah Disetujui!\n\n" .
+                       "*Layanan:* {$booking->service->name}\n" .
+                       "*Tanggal:* {$tanggal}\n" .
+                       "*Waktu:* {$jam}\n" .
+                       "*Catatan:* " . ($booking->note ?? '-') . "\n\n" .
+                       "Terima kasih telah melakukan booking. Sampai jumpa!";
+
+            $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
+
+            return redirect($waUrl);
+        }
 
         return redirect()->route('booking.list')->with('message', 'Booking Berhasil di ' . $status);
     }
