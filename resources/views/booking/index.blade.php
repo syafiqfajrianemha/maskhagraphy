@@ -12,6 +12,7 @@
                             <p><strong>Layanan:</strong> {{ $booking->service->name }}</p>
                             <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</p>
                             <p><strong>Waktu:</strong> {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }}-{{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}</p>
+                            <p><strong>Lokasi:</strong> {{ $booking->location }}</p>
                             <p><strong>Status:</strong> @if ($booking->status == 'waiting')
                                 <span class="bg-yellow-100 py-1 px-2 rounded-md">Waiting</span>
                             @endif
@@ -73,6 +74,12 @@
                             <x-input-label for="end_time" :value="__('Jam Selesai')" />
                             <x-text-input id="end_time" name="end_time" type="time" class="mt-1 block w-full" :value="old('end_time')" required />
                             <x-input-error class="mt-2" :messages="$errors->get('end_time')" />
+                        </div>
+
+                        <div class="mt-4">
+                            <x-input-label for="location" :value="__('Lokasi')" />
+                            <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" :value="old('location')" required />
+                            <x-input-error class="mt-2" :messages="$errors->get('location')" />
                         </div>
 
                         <div class="flex items-center mt-5">

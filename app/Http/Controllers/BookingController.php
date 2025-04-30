@@ -24,6 +24,7 @@ class BookingController extends Controller
             'booking_date' => 'required|date',
             'start_time' => 'required',
             'end_time' => 'required',
+            'location' => 'required',
         ]);
 
         Booking::create([
@@ -33,6 +34,7 @@ class BookingController extends Controller
             'booking_date' => $request->booking_date,
             'start_time' => $request->start_time,
             'end_time' => $request->end_time,
+            'location' => $request->location,
         ]);
 
         return redirect()->route('booking.index')->with('message', 'Booking has been created');
@@ -40,7 +42,7 @@ class BookingController extends Controller
 
     public function bookingList()
     {
-        $bookings = Booking::all();
+        $bookings = Booking::orderBy('id', 'desc')->get();
         return view('booking.booking_list', compact('bookings'));
     }
 
@@ -78,8 +80,31 @@ class BookingController extends Controller
                        "*Layanan:* {$booking->service->name}\n" .
                        "*Tanggal:* {$tanggal}\n" .
                        "*Waktu:* {$jam}\n" .
+                       "*Lokasi:* {$booking->location}\n" .
                        "*Catatan:* " . ($booking->note ?? '-') . "\n\n" .
                        "Terima kasih telah melakukan booking. Sampai jumpa!";
+
+            $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
+
+            return redirect($waUrl);
+        }
+
+        if ($request->status === 'rejected') {
+            $phone = $booking->phone;
+            if (str_starts_with($phone, '0')) {
+                $phone = '62' . substr($phone, 1);
+            }
+
+            $tanggal = \Carbon\Carbon::parse($booking->booking_date)->format('d M Y');
+            $jam = \Carbon\Carbon::parse($booking->start_time)->format('H:i') . ' - ' . \Carbon\Carbon::parse($booking->end_time)->format('H:i');
+
+            $message = "Mohon Maaf. Booking Kamu Ditolak!\n\n" .
+                       "*Layanan:* {$booking->service->name}\n" .
+                       "*Tanggal:* {$tanggal}\n" .
+                       "*Waktu:* {$jam}\n" .
+                       "*Lokasi:* {$booking->location}\n\n" .
+                       "*" . ($request->rejected_note ?? '-') . "*" . "\n\n" .
+                       "Silahkan Pilih Tanggal atau Waktu Lain. Terimakasih!";
 
             $waUrl = "https://wa.me/{$phone}?text=" . urlencode($message);
 

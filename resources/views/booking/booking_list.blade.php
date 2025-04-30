@@ -32,7 +32,7 @@
                                     <td class="px-6 py-4 text-sm text-gray-700">{{ $booking->user->name }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-700">{{ $booking->phone }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-700">{{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</td>
-                                    <td class="px-6 py-4 text-sm text-gray-700">{{ \Carbon\Carbon::parse($booking->booking_time)->format('H:i') }}</td>
+                                    <td class="px-6 py-4 text-sm text-gray-700">{{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }}-{{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}</td>
                                     @if ($booking->status === 'waiting')
                                     <td class="px-6 py-4 text-sm text-gray-700">
                                         <span class="bg-yellow-100 py-1 px-2 rounded-md">Waiting</span>
@@ -46,9 +46,7 @@
                                         <span class="bg-red-100 py-1 px-2 rounded-md">Rejected</span>
                                     </td>
                                     @endif
-                                    @if ($booking->status === 'rejected')
-                                        <td class="px-6 py-4 text-sm text-gray-700">{{ $booking->note }}</td>
-                                    @endif
+                                    <td class="px-6 py-4 text-sm text-gray-700">{{ $booking->status === 'rejected' ? $booking->note : '-' }}</td>
                                     @if ($booking->status === 'waiting')
                                     <td class="px-6 py-4 text-sm text-gray-700">
                                         <form action="{{ route('booking.update', $booking->id) }}" method="POST" class="form-approved">
