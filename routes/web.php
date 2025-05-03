@@ -41,6 +41,7 @@ Route::middleware(['auth', RoleCheck::class.':admin'])->group(function () {
     Route::resource('/service', ServiceController::class);
 
     Route::get('/booking-list', [BookingController::class, 'bookingList'])->name('booking.list');
+    Route::get('/booking/events', [BookingController::class, 'bookingEvents'])->name('booking.events');
     Route::post('/booking-list/{id}', [BookingController::class, 'update'])->name('booking.update');
 });
 
@@ -57,6 +58,7 @@ Route::middleware(['auth', RoleCheck::class.':admin,user'])->group(function () {
 
     Route::get('/booking', [BookingController::class, 'index'])->name('booking.index');
     Route::post('/booking', [BookingController::class, 'store'])->name('booking.store');
+    Route::get('/booking/success/{id}', [BookingController::class, 'success'])->name('booking.success');
 });
 
 require __DIR__.'/auth.php';

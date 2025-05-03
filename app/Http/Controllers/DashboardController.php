@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Booking;
 use App\Models\Product;
 use Illuminate\Http\Request;
 
@@ -129,6 +130,59 @@ class DashboardController extends Controller
         $chartLabels = $revenueData->pluck('label');
         $chartData = $revenueData->pluck('total');
 
+        $bookingQuery = Booking::where('status', 'approved')
+            ->whereIn('payment', ['pending', 'paid']);
+
+        if ($filter == 'daily') {
+            $bookingStats = $bookingQuery
+                ->selectRaw('DATE(approved_at) as label, COUNT(*) as total')
+                ->groupBy('label')
+                ->orderBy('label')
+                ->get();
+        } elseif ($filter == 'weekly') {
+            $bookingStats = $bookingQuery
+                ->selectRaw('YEARWEEK(approved_at, 1) as label, COUNT(*) as total')
+                ->groupBy('label')
+                ->orderBy('label')
+                ->get()
+                ->map(function ($item) {
+                    $yearWeek = $item->label;
+                    $year = substr($yearWeek, 0, 4);
+                    $week = substr($yearWeek, 4);
+                    $startOfWeek = \Carbon\Carbon::now()->setISODate($year, $week)->startOfWeek()->format('Y-m-d');
+                    $endOfWeek = \Carbon\Carbon::now()->setISODate($year, $week)->endOfWeek()->format('Y-m-d');
+                    $item->label = "$startOfWeek - $endOfWeek";
+                    return $item;
+                });
+        } elseif ($filter == 'range') {
+            $bookingStats = $bookingQuery
+                ->whereBetween('approved_at', [$startDate, $endDate])
+                ->selectRaw('DATE(approved_at) as label, COUNT(*) as total')
+                ->groupBy('label')
+                ->orderBy('label')
+                ->get();
+        } else {
+            // monthly (default)
+            $bookingStats = $bookingQuery
+                ->selectRaw('DATE_FORMAT(approved_at, "%Y-%m") as label, COUNT(*) as total')
+                ->groupBy('label')
+                ->orderBy('label')
+                ->get();
+        }
+
+        $bookingChartLabels = $bookingStats->pluck('label');
+        $bookingChartData = $bookingStats->pluck('total');
+
+        $totalBookingRevenue = Booking::where('status', 'approved')
+            ->where('payment', 'paid')
+            ->with('service')
+            ->get()
+            ->sum(function ($booking) {
+                return $booking->service->price;
+            });
+
+        $totalEarnedRevenue = $totalEarnedRevenue + $totalBookingRevenue;
+
         return view('dashboard', compact(
             'availableProducts',
             'soldProducts',
@@ -140,6 +194,8 @@ class DashboardController extends Controller
             'soldPercentage',
             'chartLabels',
             'chartData',
+            'bookingChartLabels',
+            'bookingChartData',
             'filter'
         ));
     }

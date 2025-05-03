@@ -46,6 +46,24 @@ class BookingController extends Controller
         return view('booking.booking_list', compact('bookings'));
     }
 
+    public function bookingEvents()
+    {
+        $bookings = Booking::where('status', 'approved')
+                    ->whereIn('payment', ['paid', 'pending'])
+                    ->get();
+
+        $events = $bookings->map(function ($booking) {
+            return [
+                'title' => $booking->service->name . ' - ' . $booking->user->name,
+                'start' => $booking->booking_date . 'T' . $booking->start_time,
+                'end'   => $booking->booking_date . 'T' . $booking->end_time,
+                'color' => $booking->payment == 'paid' ? '#4ade80' : '#facc15',
+            ];
+        });
+
+        return response()->json($events);
+    }
+
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -68,6 +86,10 @@ class BookingController extends Controller
         $status = $request->status === 'approved' ? 'Disetujui' : 'Ditolak';
 
         if ($request->status === 'approved') {
+            $booking->update([
+                'approved_at' => now()
+            ]);
+
             $phone = $booking->phone;
             if (str_starts_with($phone, '0')) {
                 $phone = '62' . substr($phone, 1);
@@ -112,5 +134,14 @@ class BookingController extends Controller
         }
 
         return redirect()->route('booking.list')->with('message', 'Booking Berhasil di ' . $status);
+    }
+
+    public function success($id)
+    {
+        $booking = Booking::findOrFail($id);
+        $booking->update([
+            'payment' => 'paid'
+        ]);
+        return redirect()->route('booking.index')->with('message', 'Pembayaran Berhasil');
     }
 }

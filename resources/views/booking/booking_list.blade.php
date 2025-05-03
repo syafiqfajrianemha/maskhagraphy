@@ -20,6 +20,7 @@
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Date</th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Time</th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Status</th>
+                                <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Payment</th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Rejected Note</th>
                                 <th class="px-6 py-3 text-left text-sm font-medium text-gray-600">Action</th>
                             </tr>
@@ -46,6 +47,7 @@
                                         <span class="bg-red-100 py-1 px-2 rounded-md">Rejected</span>
                                     </td>
                                     @endif
+                                    <td class="px-6 py-4 text-sm text-gray-700">{{ $booking->payment }}</td>
                                     <td class="px-6 py-4 text-sm text-gray-700">{{ $booking->status === 'rejected' ? $booking->note : '-' }}</td>
                                     @if ($booking->status === 'waiting')
                                     <td class="px-6 py-4 text-sm text-gray-700">
@@ -72,6 +74,10 @@
                     </table>
                 </div>
             </div>
+
+            <div class="mt-6 p-6 bg-white overflow-hidden shadow-sm sm:rounded-lg">
+                <div id="calendar"></div>
+            </div>
         </div>
     </div>
 
@@ -79,5 +85,25 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <script src="{{ asset('js/main.js') }}"></script>
+        <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.17/index.global.min.js'></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                var calendarEl = document.getElementById('calendar');
+
+                var calendar = new FullCalendar.Calendar(calendarEl, {
+                    initialView: 'dayGridMonth',
+                    height: 600,
+                    events: "{{ route('booking.events') }}",
+                    headerToolbar: {
+                        left: 'prev,next today',
+                        center: 'title',
+                        right: 'dayGridMonth,timeGridWeek,timeGridDay,listWeek'
+                    },
+                    eventTimeFormat: { hour: '2-digit', minute: '2-digit', hour12: false },
+                });
+
+                calendar.render();
+            });
+        </script>
     @endpush
 </x-app-layout>

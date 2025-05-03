@@ -21,6 +21,7 @@
 
                         <div class="bg-blue-100 p-4 rounded shadow">
                             <h3 class="text-lg font-bold">Total Pendapatan Terealisasi</h3>
+                            <p class="text-sm text-gray-500 mb-1">Termasuk dari produk dan booking paid</p>
                             <p class="text-2xl font-semibold text-blue-700">
                                 Rp. {{ number_format($totalEarnedRevenue, 0, ',', '.') }}
                             </p>
@@ -68,6 +69,11 @@
                         </div>
 
                         <canvas id="revenueChart" height="100"></canvas>
+
+                        <hr class="my-6">
+
+                        <h3 class="text-lg font-semibold mb-4">Grafik Jumlah Booking</h3>
+                        <canvas id="bookingChart" height="100"></canvas>
                     </div>
 
                     {{-- Daftar Produk --}}
@@ -136,6 +142,31 @@
                                 callback: function(value) {
                                     return 'Rp' + value.toLocaleString('id-ID');
                                 }
+                            }
+                        }
+                    }
+                }
+            });
+
+            const bookingCtx = document.getElementById('bookingChart').getContext('2d');
+            const bookingChart = new Chart(bookingCtx, {
+                type: 'bar',
+                data: {
+                    labels: @json($bookingChartLabels),
+                    datasets: [{
+                        label: 'Jumlah Booking',
+                        data: @json($bookingChartData),
+                        backgroundColor: 'rgba(255, 99, 132, 0.7)',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                precision: 0
                             }
                         }
                     }

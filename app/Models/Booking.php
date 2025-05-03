@@ -8,6 +8,10 @@ class Booking extends Model
 {
     protected $guarded = ['id'];
 
+    protected $casts = [
+        'approved_at' => 'datetime',
+    ];
+
     public function service()
     {
         return $this->belongsTo(Service::class);
