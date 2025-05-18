@@ -20,7 +20,7 @@
         <div class="min-h-screen bg-gray-100">
             @include('layouts.navigation-guest')
 
-            <main>
+            <main class="p-2">
                 {{ $slot }}
             </main>
         </div>

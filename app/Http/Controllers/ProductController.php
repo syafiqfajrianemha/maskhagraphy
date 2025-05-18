@@ -78,9 +78,38 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product)
+    public function update(Request $request, $id)
     {
-        //
+        $request->validate([
+            'image' => 'nullable|mimes:png,jpg,jpeg',
+            'price' => 'required|numeric',
+            'description' => 'nullable',
+        ]);
+
+        $product = Product::findOrFail($id);
+
+        $imageName = $product->image;
+
+        if ($request->hasFile('image')) {
+            $image = $request->file('image');
+
+            if ($image->isValid()) {
+                if ($product->image && Storage::disk('public')->exists('files/images/' . $product->image)) {
+                    Storage::disk('public')->delete('files/images/' . $product->image);
+                }
+
+                $imageName = time() . '.' . $image->getClientOriginalExtension();
+                Storage::disk('public')->putFileAs('files/images', $image, $imageName);
+            }
+        }
+
+        $product->update([
+            'image' => $imageName,
+            'price' => $request->price,
+            'description' => $request->description,
+        ]);
+
+        return redirect()->route('product.index')->with('message', 'Product has been updated');
     }
 
     /**

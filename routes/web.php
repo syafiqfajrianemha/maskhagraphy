@@ -35,7 +35,7 @@ Route::middleware(['auth', RoleCheck::class.':admin'])->group(function () {
     Route::get('/product/{id}', [ProductController::class, 'edit'])->name('product.edit');
     Route::get('/product/status/filter', [ProductController::class, 'statusFilter'])->name('product.status.filter');
     Route::post('/product', [ProductController::class, 'store'])->name('product.store');
-    // Route::patch('/product/{id}', [ProductController::class, 'update'])->name('product.update');
+    Route::patch('/product/{id}', [ProductController::class, 'update'])->name('product.update');
     Route::delete('product/{id}', [ProductController::class, 'destroy'])->name('product.destroy');
 
     Route::resource('/service', ServiceController::class);

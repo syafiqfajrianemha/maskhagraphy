@@ -9,13 +9,14 @@
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
                 <div class="p-6 text-gray-900">
-                    <form method="post" action="{{ route('product.store') }}" enctype="multipart/form-data">
+                    <form method="post" action="{{ route('product.update', $product->id) }}" enctype="multipart/form-data">
                         @csrf
+                        @method('PATCH')
 
                         <div>
                             {{-- <x-input-label for="image" :value="__('Image')" /> --}}
                             <img src="{{ asset('storage/files/images/' . $product->image) }}" alt="photo of {{ $product->image }}" class="img-thumbnail img-preview" width="100">
-                            <input type="file" name="image" id="image" onchange="previewImage()" class="mt-1 block w-full file:py-1 file:px-2 file:rounded-full file:border-0 file:bg-violet-50 file:text-violet-700" required>
+                            <input type="file" name="image" id="image" onchange="previewImage()" class="mt-1 block w-full file:py-1 file:px-2 file:rounded-full file:border-0 file:bg-violet-50 file:text-violet-700">
                             <x-input-error class="mt-2" :messages="$errors->get('image')" />
                         </div>
 
