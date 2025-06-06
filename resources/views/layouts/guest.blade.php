@@ -1,42 +1,53 @@
 <!DOCTYPE html>
-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <meta name="csrf-token" content="{{ csrf_token() }}">
+<html lang="en">
 
-        <title>{{ config('app.name', 'Laravel') }}</title>
+<head>
 
-        <!-- Fonts -->
-        <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-        <!-- Scripts -->
-        @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <link href="{{ asset('images/favicon.png') }}" rel="icon">
 
-        @stack('style')
-    </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-gray-100">
-            @include('layouts.navigation-guest')
+    <title>{{ config('app.name', 'Laravel') }}</title>
 
-            <main class="p-2">
-                {{ $slot }}
-            </main>
-        </div>
-    </body>
-    {{-- <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
+    <link href="https://fonts.googleapis.com" rel="preconnect">
+    <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Raleway:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap"
+        rel="stylesheet">
 
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
-            </div>
-        </div>
-    </body> --}}
-    @stack('script')
+    <link href="{{ asset('guest/bootstrap/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('guest/bootstrap-icons/bootstrap-icons.css') }}" rel="stylesheet">
+    <link href="{{ asset('guest/aos/aos.css') }}" rel="stylesheet">
+    <link href="{{ asset('guest/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('guest/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
+    <link href="{{ asset('guest/css/main.css') }}" rel="stylesheet">
+</head>
+
+<body class="index-page">
+
+    @include('layouts.navigation-guest')
+
+    <main class="main">
+        {{ $slot }}
+    </main>
+
+    @include('layouts.footer-guest')
+
+    <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i
+            class="bi bi-arrow-up-short"></i></a>
+
+    <div id="preloader"></div>
+
+    <script src="{{ asset('guest/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ asset('guest/aos/aos.js') }}"></script>
+    <script src="{{ asset('guest/glightbox/js/glightbox.min.js') }}"></script>
+    <script src="{{ asset('guest/purecounter/purecounter_vanilla.js') }}"></script>
+    <script src="{{ asset('guest/imagesloaded/imagesloaded.pkgd.min.js') }}"></script>
+    <script src="{{ asset('guest/isotope-layout/isotope.pkgd.min.js') }}"></script>
+    <script src="{{ asset('guest/swiper/swiper-bundle.min.js') }}"></script>
+    <script src="{{ asset('guest/js/main.js') }}"></script>
+</body>
+
 </html>

@@ -1,110 +1,105 @@
 <x-guest-layout>
     @push('style')
-        <!-- @TODO: replace SET_YOUR_CLIENT_KEY_HERE with your client key -->
-            <script type="text/javascript"
+        <script type="text/javascript"
             src="https://app.sandbox.midtrans.com/snap/snap.js"
             data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
-        <!-- Note: replace with src="https://app.midtrans.com/snap/snap.js" for Production environment -->
     @endpush
 
     <div id="flash-data" data-flashdata="{{ session('message') }}"></div>
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <h2 class="text-lg font-medium text-gray-900">Your Cart</h2>
+    <div class="container py-5">
+        <h2 class="mb-4 fw-bold">Your Cart</h2>
 
-                    <div class="mt-5">
-                        <ul role="list" class="-my-6 divide-y divide-gray-200">
-                            @if ($cart && $cart->items->count())
-                                @foreach ($cart->items as $item)
-                                    <li class="flex py-6">
-                                        <div class="size-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
-                                            <img src="{{ asset('storage/files/images/' . $item->product->image) }}"
-                                                alt="image {{ $item->product->image }}" class="size-full object-cover">
-                                        </div>
-
-                                        <div class="ml-4 flex flex-1 flex-col">
+        @if ($cart && $cart->items->count())
+            <div class="row g-4">
+                @foreach ($cart->items as $item)
+                    <div class="col-12">
+                        <div class="card shadow-sm">
+                            <div class="row g-0">
+                                <div class="col-md-2">
+                                    <img src="{{ asset('storage/files/images/' . $item->product->image) }}"
+                                        class="img-fluid rounded-start h-100 object-fit-cover" alt="{{ $item->product->name }}">
+                                </div>
+                                <div class="col-md-10">
+                                    <div class="card-body d-flex flex-column justify-content-between h-100">
+                                        <div class="d-flex justify-content-between align-items-start">
                                             <div>
-                                                <div class="flex justify-between text-base font-medium text-gray-900">
-                                                    <h3>
-                                                        <a href="#">{{ $item->product->image }}</a>
-                                                    </h3>
-                                                    <p class="ml-4">Rp.
-                                                        {{ number_format($item->product->price, 0, '.', '.') }}
-                                                    </p>
-                                                </div>
-                                                <p class="mt-1 text-sm text-gray-500">{{ $item->product->description }}</p>
+                                                <h5 class="card-title mb-1">{{ $item->product->name }}</h5>
+                                                <p class="card-text text-muted small mb-2">{{ $item->product->description }}</p>
+                                                <p class="card-text mb-1"><small class="text-muted">Qty: {{ $item->quantity }}</small></p>
                                             </div>
-                                            <div class="flex flex-1 items-end justify-between text-sm">
-                                                <p class="text-gray-500">Qty {{ $item->quantity }}</p>
-
-                                                <div class="flex">
-                                                    <form action="{{ route('cart.remove', $item) }}" method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button type="submit"
-                                                            class="font-medium text-indigo-600 hover:text-indigo-500">Remove</button>
-                                                    </form>
-                                                </div>
+                                            <div class="text-end">
+                                                <h6 class="text-primary">Rp. {{ number_format($item->product->price, 0, '.', '.') }}</h6>
+                                                <form action="{{ route('cart.remove', $item) }}" method="POST" class="mt-2">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                                                </form>
                                             </div>
                                         </div>
-                                    </li>
-                                @endforeach
-                            @else
-                                <p class="mt-10 mb-6 text-red-500">Your cart is empty. <a class="text-blue-500"
-                                    href="{{ route('home.index') }}">Shop Now<span aria-hidden="true">
-                                        &rarr;</span></a>
-                                </p>
-                            @endif
-                        </ul>
-                        @if ($totalPrice >= 1)
-                        <div class="border-t border-gray-200 px-4 py-6 sm:px-6 mt-5">
-                            <div class="flex justify-between text-base font-medium text-gray-900">
-                                <p>Total</p>
-                                <p>Rp. {{ number_format($totalPrice, 0, '.', '.') }}</p>
-                            </div>
-                            <div class="mt-6">
-                                @if ($snapToken)
-                                <button class="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700" id="payment">Payment</button>
-                                @endif
+                                    </div>
+                                </div>
                             </div>
                         </div>
+                    </div>
+                @endforeach
+            </div>
+
+            @if ($totalPrice >= 1)
+                <div class="card mt-4">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <h5 class="mb-0">Total: Rp. {{ number_format($totalPrice, 0, '.', '.') }}</h5>
+                        @if ($snapToken)
+                            <button class="btn btn-success" id="payment">Proceed to Payment</button>
                         @endif
                     </div>
                 </div>
+            @endif
+        @else
+            <div class="alert alert-warning mt-4">
+                Your cart is empty. <a href="{{ route('home.index') }}" class="alert-link">Shop now &rarr;</a>
             </div>
-        </div>
+        @endif
     </div>
 
     @push('script')
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"
-        integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
-    <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
-    <script src="{{ asset('js/main.js') }}"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+        <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-    <script type="text/javascript">
-        // For example trigger on button clicked, or any time you need
-        var payButton = document.getElementById('payment');
-        payButton.addEventListener('click', function () {
-            window.snap.pay('{{ $snapToken }}', {
-                onSuccess: function (result) {
-                    window.location.replace("{{ route('payment.success') }}");
-                },
-                onPending: function (result) {
-                    alert("Waiting for your payment!");
-                    console.log(result);
-                },
-                onError: function (result) {
-                    alert("Payment failed!");
-                    console.log(result);
-                },
-                onClose: function () {
-                    alert('You closed the popup without finishing the payment.');
-                }
-            });
-        });
-    </script>
+        <script>
+            const flashData = $('#flash-data').data('flashdata');
+            if (flashData) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: flashData,
+                    timer: 3000,
+                    showConfirmButton: false
+                });
+            }
+
+            const payButton = document.getElementById('payment');
+            if (payButton) {
+                payButton.addEventListener('click', function () {
+                    window.snap.pay('{{ $snapToken }}', {
+                        onSuccess: function (result) {
+                            window.location.replace("{{ route('payment.success') }}");
+                        },
+                        onPending: function (result) {
+                            alert("Waiting for your payment!");
+                            console.log(result);
+                        },
+                        onError: function (result) {
+                            alert("Payment failed!");
+                            console.log(result);
+                        },
+                        onClose: function () {
+                            alert('You closed the popup without finishing the payment.');
+                        }
+                    });
+                });
+            }
+        </script>
     @endpush
 </x-guest-layout>

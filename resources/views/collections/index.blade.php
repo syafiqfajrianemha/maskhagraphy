@@ -17,20 +17,38 @@
                 font-size: 12px;
                 text-decoration: none;
                 display: none;
+                z-index: 10;
             }
 
             .hover-container:hover .download-btn {
                 display: block;
             }
+
+            .hover-container {
+                transition: transform 0.3s ease;
+            }
+
+            .hover-container:hover {
+                transform: scale(1.05);
+            }
+
+            .img-fluid-custom {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                border-radius: 0.5rem;
+            }
         </style>
     @endpush
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                @forelse ($collections as $collection)
-                    <div class="relative hover-container hover:scale-105 transition duration-300">
-                        <img cursor="pointer" src="{{ asset('storage/files/images/' . $collection->product->image) }}" alt="image {{ $collection->product->image }}">
+    <div class="container py-5">
+        <div class="row g-3">
+            @forelse ($collections as $collection)
+                <div class="col-6 col-md-3">
+                    <div class="position-relative hover-container">
+                        <img src="{{ asset('storage/files/images/' . $collection->product->image) }}"
+                             alt="{{ $collection->product->image }}"
+                             class="img-fluid-custom shadow-sm">
 
                         <a href="{{ asset('storage/files/images/' . $collection->product->image) }}"
                            download="{{ $collection->product->image }}"
@@ -38,10 +56,12 @@
                             Download
                         </a>
                     </div>
-                @empty
-                    <p class="text-red-800">There is no data.</p>
-                @endforelse
-            </div>
+                </div>
+            @empty
+                <div class="col-12">
+                    <p class="text-danger">There is no data.</p>
+                </div>
+            @endforelse
         </div>
     </div>
 

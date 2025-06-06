@@ -1,20 +1,18 @@
 <x-guest-layout>
     @push('style')
-        <!-- @TODO: replace SET_YOUR_CLIENT_KEY_HERE with your client key -->
-            <script type="text/javascript"
+        <script type="text/javascript"
             src="https://app.sandbox.midtrans.com/snap/snap.js"
             data-client-key="{{ env('MIDTRANS_CLIENT_KEY') }}"></script>
-        <!-- Note: replace with src="https://app.midtrans.com/snap/snap.js" for Production environment -->
     @endpush
 
     <div id="flash-data" data-flashdata="{{ session('message') }}"></div>
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-                <div>
-                    <h2 class="text-xl font-semibold mb-4">Daftar Booking Kamu</h2>
-
+    <div class="py-5">
+        <div class="container">
+            <div class="row g-4">
+                {{-- Kiri: Daftar Booking --}}
+                <div class="col-md-6">
+                    <h2 class="h4 fw-bold mb-3">Daftar Booking Kamu</h2>
                     @forelse ($bookings as $booking)
                         @php
                             $servicePrice = $booking->service->price;
@@ -40,97 +38,99 @@
                                 $snapToken = \Midtrans\Snap::getSnapToken($params);
                             }
                         @endphp
-                        <div class="p-4 mb-3 border rounded-md shadow-sm bg-gray-50">
-                            <p><strong>Layanan:</strong> {{ $booking->service->name }}</p>
-                            <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</p>
-                            <p><strong>Waktu:</strong> {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }}-{{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}</p>
-                            <p><strong>Lokasi:</strong> {{ $booking->location }}</p>
-                            <p><strong>Status:</strong> @if ($booking->status == 'waiting')
-                                <span class="bg-yellow-100 py-1 px-2 rounded-md">Waiting</span>
-                            @endif
-                            @if ($booking->status == 'approved')
-                                <span class="bg-green-100 py-1 px-2 rounded-md">Approved</span>
-                            @endif
-                            @if ($booking->status == 'rejected')
-                                <span class="bg-red-100 py-1 px-2 rounded-md">Rejected</span>
-                            @endif</p>
-                            @if ($booking->status == 'approved')
-                                <p><strong>Payment:</strong> {{ $booking->payment }}</p>
-                            @endif
-                            @if ($booking->status == 'approved' && $booking->approved_at && now()->diffInMinutes($booking->approved_at) <= 60 && $booking->payment == 'pending')
-                                @if ($snapToken)
-                                <button
-                                    id="pay-button-{{ $booking->id }}"
-                                    class="mt-2 bg-blue-400 py-1 px-2 rounded-md text-white hover:bg-blue-300"
-                                    data-snap-token="{{ $snapToken }}"
-                                    data-booking-id="{{ $booking->id }}"
-                                >Bayar Sekarang</button>
+
+                        <div class="card mb-3">
+                            <div class="card-body">
+                                <p><strong>Layanan:</strong> {{ $booking->service->name }}</p>
+                                <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</p>
+                                <p><strong>Waktu:</strong> {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}</p>
+                                <p><strong>Lokasi:</strong> {{ $booking->location }}</p>
+                                <p><strong>Status:</strong>
+                                    @if ($booking->status == 'waiting')
+                                        <span class="badge bg-warning text-dark">Waiting</span>
+                                    @elseif ($booking->status == 'approved')
+                                        <span class="badge bg-success">Approved</span>
+                                    @elseif ($booking->status == 'rejected')
+                                        <span class="badge bg-danger">Rejected</span>
+                                    @endif
+                                </p>
+
+                                @if ($booking->status == 'approved')
+                                    <p><strong>Payment:</strong> {{ $booking->payment }}</p>
                                 @endif
-                                <p id="countdown-{{ $booking->id }}" class="text-sm text-red-500 mt-1"></p>
-                            @endif
-                            @if ($booking->note)
-                                <p><strong>Catatan:</strong> {{ $booking->note ?? '-' }}</p>
-                            @endif
+
+                                @if ($booking->status == 'approved' && $booking->approved_at && now()->diffInMinutes($booking->approved_at) <= 60 && $booking->payment == 'pending')
+                                    @if ($snapToken)
+                                        <button
+                                            id="pay-button-{{ $booking->id }}"
+                                            class="btn btn-primary btn-sm mt-2"
+                                            data-snap-token="{{ $snapToken }}"
+                                            data-booking-id="{{ $booking->id }}"
+                                        >Bayar Sekarang</button>
+                                    @endif
+                                    <p id="countdown-{{ $booking->id }}" class="text-danger small mt-1"></p>
+                                @endif
+
+                                @if ($booking->note)
+                                    <p><strong>Catatan:</strong> {{ $booking->note }}</p>
+                                @endif
+                            </div>
                         </div>
                     @empty
-                        <p class="text-gray-500">Belum ada booking yang kamu buat.</p>
+                        <div class="alert alert-secondary">Belum ada booking yang kamu buat.</div>
                     @endforelse
                 </div>
 
-                <hr class="my-4">
-
-                <div>
-                    <h2 class="text-xl font-semibold mb-4">Buat Booking Baru</h2>
-
+                {{-- Kanan: Form Booking --}}
+                <div class="col-md-6">
+                    <h2 class="h4 fw-bold mb-3">Buat Booking Baru</h2>
                     <form method="POST" action="{{ route('booking.store') }}">
                         @csrf
 
-                        <div>
-                            <x-input-label for="service_id" :value="__('Layanan')" />
-                            <select name="service_id" id="service_id" class="mt-1 block w-full border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md shadow-sm" required>
-                                <option value="" disabled selected>-- Pilih Layanan --</option>
+                        <div class="mb-3">
+                            <label for="service_id" class="form-label">Layanan</label>
+                            <select class="form-select" name="service_id" id="service_id" required>
+                                <option disabled selected>-- Pilih Layanan --</option>
                                 @foreach($services as $service)
                                     <option value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
                                         {{ $service->name }} - Rp{{ number_format($service->price) }}
                                     </option>
                                 @endforeach
                             </select>
-                            <x-input-error class="mt-2" :messages="$errors->get('service_id')" />
+                            <x-input-error class="text-danger mt-1" :messages="$errors->get('service_id')" />
                         </div>
 
-                        <div class="mt-4">
-                            <x-input-label for="phone" :value="__('No. Telepon')" />
-                            <x-text-input id="phone" name="phone" type="text" class="mt-1 block w-full" :value="old('phone')" required />
-                            <x-input-error class="mt-2" :messages="$errors->get('phone')" />
+                        <div class="mb-3">
+                            <label for="phone" class="form-label">No. Telepon</label>
+                            <input type="text" class="form-control" id="phone" name="phone" value="{{ old('phone') }}" required>
+                            <x-input-error class="text-danger mt-1" :messages="$errors->get('phone')" />
                         </div>
 
-                        <div class="mt-4">
-                            <x-input-label for="booking_date" :value="__('Tanggal Booking')" />
-                            <x-text-input id="booking_date" name="booking_date" type="date" class="mt-1 block w-full" :value="old('booking_date')" required />
-                            <x-input-error class="mt-2" :messages="$errors->get('booking_date')" />
+                        <div class="mb-3">
+                            <label for="booking_date" class="form-label">Tanggal Booking</label>
+                            <input type="date" class="form-control" id="booking_date" name="booking_date" value="{{ old('booking_date') }}" required>
+                            <x-input-error class="text-danger mt-1" :messages="$errors->get('booking_date')" />
                         </div>
 
-                        <div class="mt-4">
-                            <x-input-label for="start_time" :value="__('Jam Mulai')" />
-                            <x-text-input id="start_time" name="start_time" type="time" class="mt-1 block w-full" :value="old('start_time')" required />
-                            <x-input-error class="mt-2" :messages="$errors->get('start_time')" />
+                        <div class="mb-3">
+                            <label for="start_time" class="form-label">Jam Mulai</label>
+                            <input type="time" class="form-control" id="start_time" name="start_time" value="{{ old('start_time') }}" required>
+                            <x-input-error class="text-danger mt-1" :messages="$errors->get('start_time')" />
                         </div>
 
-                        <div class="mt-4">
-                            <x-input-label for="end_time" :value="__('Jam Selesai')" />
-                            <x-text-input id="end_time" name="end_time" type="time" class="mt-1 block w-full" :value="old('end_time')" required />
-                            <x-input-error class="mt-2" :messages="$errors->get('end_time')" />
+                        <div class="mb-3">
+                            <label for="end_time" class="form-label">Jam Selesai</label>
+                            <input type="time" class="form-control" id="end_time" name="end_time" value="{{ old('end_time') }}" required>
+                            <x-input-error class="text-danger mt-1" :messages="$errors->get('end_time')" />
                         </div>
 
-                        <div class="mt-4">
-                            <x-input-label for="location" :value="__('Lokasi')" />
-                            <x-text-input id="location" name="location" type="text" class="mt-1 block w-full" :value="old('location')" required />
-                            <x-input-error class="mt-2" :messages="$errors->get('location')" />
+                        <div class="mb-3">
+                            <label for="location" class="form-label">Lokasi</label>
+                            <input type="text" class="form-control" id="location" name="location" value="{{ old('location') }}" required>
+                            <x-input-error class="text-danger mt-1" :messages="$errors->get('location')" />
                         </div>
 
-                        <div class="flex items-center mt-5">
-                            <x-primary-button>{{ __('Kirim Booking') }}</x-primary-button>
-                        </div>
+                        <button type="submit" class="btn btn-success">Kirim Booking</button>
                     </form>
                 </div>
             </div>
@@ -142,66 +142,57 @@
             integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
         <script src="//cdn.jsdelivr.net/npm/sweetalert2@10"></script>
         <script src="{{ asset('js/main.js') }}"></script>
+
         @if (isset($booking))
         <script>
             document.addEventListener('DOMContentLoaded', function () {
                 @foreach ($bookings as $booking)
                     @if ($booking->status == 'approved' && $booking->payment == 'pending')
-                        (function() {
+                        (function () {
                             let deadline{{ $booking->id }} = new Date("{{ $booking->approved_at->addHour() }}").getTime();
                             let countdownEl = document.getElementById("countdown-{{ $booking->id }}");
                             let btnPayment = document.getElementById("pay-button-{{ $booking->id }}");
 
                             if (!countdownEl) return;
 
-                            let timer{{ $booking->id }} = setInterval(function () {
+                            let timer = setInterval(function () {
                                 let now = new Date().getTime();
                                 let distance = deadline{{ $booking->id }} - now;
 
                                 if (distance < 0) {
-                                    clearInterval(timer{{ $booking->id }});
-                                    if (countdownEl) {
-                                        countdownEl.innerHTML = "Waktu pembayaran telah habis";
-                                    }
-                                    if (btnPayment) {
-                                        btnPayment.style.display = "none";
-                                    }
+                                    clearInterval(timer);
+                                    countdownEl.innerHTML = "Waktu pembayaran telah habis";
+                                    if (btnPayment) btnPayment.style.display = "none";
                                     return;
                                 }
 
                                 let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                                 let seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-                                minutes = ("0" + minutes).slice(-2);
-                                seconds = ("0" + seconds).slice(-2);
-
-                                countdownEl.innerHTML = "Sisa waktu: " + minutes + ":" + seconds;
+                                countdownEl.innerHTML = `Sisa waktu: ${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                             }, 1000);
                         })();
                     @endif
                 @endforeach
-            });
 
-            document.querySelectorAll('button[id^="pay-button-"]').forEach(function (button) {
-                button.addEventListener('click', function () {
-                    let snapToken = this.getAttribute('data-snap-token');
-                    let bookingId = this.getAttribute('data-booking-id');
+                document.querySelectorAll('button[id^="pay-button-"]').forEach(function (button) {
+                    button.addEventListener('click', function () {
+                        let snapToken = this.dataset.snapToken;
+                        let bookingId = this.dataset.bookingId;
 
-                    window.snap.pay(snapToken, {
-                        onSuccess: function (result) {
-                            window.location.replace(`/booking/success/${bookingId}`);
-                        },
-                        onPending: function (result) {
-                            alert("Menunggu pembayaran...");
-                            console.log(result);
-                        },
-                        onError: function (result) {
-                            alert("Pembayaran gagal!");
-                            console.log(result);
-                        },
-                        onClose: function () {
-                            alert("Anda menutup popup sebelum menyelesaikan pembayaran.");
-                        }
+                        window.snap.pay(snapToken, {
+                            onSuccess: function () {
+                                window.location.replace(`/booking/success/${bookingId}`);
+                            },
+                            onPending: function () {
+                                alert("Menunggu pembayaran...");
+                            },
+                            onError: function () {
+                                alert("Pembayaran gagal!");
+                            },
+                            onClose: function () {
+                                alert("Anda menutup popup sebelum menyelesaikan pembayaran.");
+                            }
+                        });
                     });
                 });
             });
