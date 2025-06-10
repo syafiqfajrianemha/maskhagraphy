@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\Service;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -10,7 +11,8 @@ class HomeController extends Controller
     public function index()
     {
         $products = Product::where('status', 'available')->latest()->paginate(20);
-        return view('home.index', compact('products'));
+        $services = Service::latest()->get();
+        return view('home.index', compact('products', 'services'));
     }
 
     public function search(Request $request)
@@ -19,11 +21,12 @@ class HomeController extends Controller
             ->where('description', 'like', '%' . $request->q . '%')
             ->latest()
             ->paginate(20);
+        $services = Service::latest()->get();
 
         if ($request->ajax()) {
             return view('home._product-list', compact('products'))->render();
         }
 
-        return view('home.index', compact('products'));
+        return view('home.index', compact('products', 'services'));
     }
 }

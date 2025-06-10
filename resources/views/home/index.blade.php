@@ -62,9 +62,9 @@
                             <i class="bi bi-cash-coin"></i>
                         </div>
                         <a href="" class="stretched-link">
-                            <h3>Harga Tetap</h3>
+                            <h3>Fotografer Profesional</h3>
                         </a>
-                        <p>Pemesanan fotografer yang mudah dengan tarif tetap per jam</p>
+                        <p>Fotografer Profesional Pilihan Anda untuk Setiap Momen Spesial</p>
                     </div>
                 </div>
                 <div class="col-lg-3" data-aos="fade-up" data-aos-delay="100">
@@ -93,19 +93,78 @@
         </div>
     </section>
 
-    <section id="call-to-action" class="call-to-action section accent-background">
+    <section id="call-to-action" class="call-to-action section accent-background py-5">
         <div class="container">
-            <div class="row justify-content-center" data-aos="zoom-in" data-aos-delay="100">
-                <div class="col-xl-10">
-                    <div class="text-center">
-                        <h3>Dapatkan fotografer terbaik secara instan untuk semua kebutuhan Anda</h3>
+            <div class="row justify-content-center mb-4" data-aos="zoom-in" data-aos-delay="100">
+                <div class="col-xl-10 text-center">
+                    <h3>Hanya Empat Langkah untuk Mendapatkan Foto Terbaik</h3>
+                </div>
+            </div>
+            <div class="row text-center justify-content-center">
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto text-dark"
+                        style="width: 100px; height: 100px; font-size: 2rem;">
+                        1
                     </div>
+                    <p class="mt-2">Booking</p>
+                </div>
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto text-dark"
+                        style="width: 100px; height: 100px; font-size: 2rem;">
+                        2
+                    </div>
+                    <p class="mt-2">Pemotretan</p>
+                </div>
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto text-dark"
+                        style="width: 100px; height: 100px; font-size: 2rem;">
+                        3
+                    </div>
+                    <p class="mt-2">Editing</p>
+                </div>
+                <div class="col-6 col-md-3 mb-4">
+                    <div class="rounded-circle bg-light d-flex align-items-center justify-content-center mx-auto text-dark"
+                        style="width: 100px; height: 100px; font-size: 2rem;">
+                        4
+                    </div>
+                    <p class="mt-2">Kirim</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="team" class="team section">
+    <section class="services section">
+        <div class="container section-title" data-aos="fade-up">
+            <h2>Layanan Kami</h2>
+        </div>
+
+        <div class="container">
+            <div class="row gy-4 justify-content-center">
+                @forelse ($services as $service)
+                <div class="col-lg-4" data-aos="fade-up" data-aos-delay="100">
+                    <div class="service-item position-relative">
+                        <div class="icon">
+                            <i class="bi bi-camera2"></i>
+                        </div>
+                        <a href="" class="stretched-link">
+                            <h3>{{ $service->name }}</h3>
+                        </a>
+                        <p>{{ $service->description }}</p>
+                        <span class="text-muted">Rp. {{ number_format($service->price, 0,'.','.') }}</span>
+                    </div>
+                </div>
+                @empty
+                <p class="text-danger text-center">Data Kosong</p>
+                @endforelse
+            </div>
+
+            <div class="text-center mt-4">
+                <a href="{{ route('booking.index') }}" class="btn btn-warning text-white">BOOK NOW</a>
+            </div>
+        </div>
+    </section>
+
+    {{-- <section id="team" class="team section">
         <div class="container section-title" data-aos="fade-up">
             <h2>Temukan Foto Anda</h2>
         </div>
@@ -113,23 +172,24 @@
         <div class="container">
             <div class="row gy-5 justify-content-center">
                 @foreach ($products as $product)
-                    <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
-                        <div class="member">
-                            <div class="pic"><img src="{{ asset('storage/files/images/' . $product->image) }}" class="img-fluid" alt="image {{ $product->image }}"></div>
-                            <div class="member-info">
-                                <h4>Rp. {{ number_format($product->price, 0, '.', '.') }}</h4>
-                                <span>{{ $product->description }}</span>
-                                <div class="social">
-                                    <form action="{{ route('cart.store', $product) }}" method="POST">
-                                        @csrf
-                                        <button type="submit" style="background: transparent; border: none;">
-                                            <i class="bi bi-cart"></i>
-                                        </button>
-                                    </form>
-                                </div>
+                <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-delay="100">
+                    <div class="member">
+                        <div class="pic"><img src="{{ asset('storage/files/images/' . $product->image) }}"
+                                class="img-fluid" alt="image {{ $product->image }}"></div>
+                        <div class="member-info">
+                            <h4>Rp. {{ number_format($product->price, 0, '.', '.') }}</h4>
+                            <span>{{ $product->description }}</span>
+                            <div class="social">
+                                <form action="{{ route('cart.store', $product) }}" method="POST">
+                                    @csrf
+                                    <button type="submit" style="background: transparent; border: none;">
+                                        <i class="bi bi-cart"></i>
+                                    </button>
+                                </form>
                             </div>
                         </div>
                     </div>
+                </div>
                 @endforeach
             </div>
         </div>
@@ -137,5 +197,5 @@
 
     <div class="container">
         {{ $products->links() }}
-    </div>
+    </div> --}}
 </x-guest-layout>

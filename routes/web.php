@@ -4,6 +4,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PortfolioController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PurchaseController;
@@ -18,6 +19,8 @@ Route::redirect('/', '/home', 301);
 
 Route::get('/home', [HomeController::class, 'search'])->name('home.index');
 Route::get('/search', [HomeController::class, 'search'])->name('home.search');
+
+Route::get('/portofolio', [PortfolioController::class, 'index'])->name('portfolio.index');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');

@@ -10,19 +10,21 @@
                         class="{{ request()->routeIs('home.index') ? 'active' : '' }}">Home</a></li>
                 <li><a href="{{ route('booking.index') }}"
                         class="{{ request()->routeIs('booking.index') ? 'active' : '' }}">Booking</a></li>
-                @if (Route::has('login'))
+                <li><a href="{{ route('portfolio.index') }}"
+                        class="{{ request()->routeIs('portfolio.index') ? 'active' : '' }}">Portofolio</a></li>
+                {{-- @if (Route::has('login'))
                     @auth
                         <li><a href="{{ route('collections.index') }}"
                             class="{{ request()->routeIs('collections.index') ? 'active' : '' }}">Collection</a></li>
                     @endauth
-                @endif
-                <li>
+                @endif --}}
+                {{-- <li>
                     <a href="{{ route('cart.index') }}">
                         <i class="bi bi-cart" style="font-size: 16px; font-style: normal;">
                             <span>{{ $cartCount }}</span>
                         </i>
                     </a>
-                </li>
+                </li> --}}
                 @if (Route::has('login'))
                     @auth
                         <li class="dropdown"><a href=""><span>{{ Auth::user()->name }}</span> <i
