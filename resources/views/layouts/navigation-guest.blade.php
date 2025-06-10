@@ -10,8 +10,8 @@
                         class="{{ request()->routeIs('home.index') ? 'active' : '' }}">Home</a></li>
                 <li><a href="{{ route('booking.index') }}"
                         class="{{ request()->routeIs('booking.index') ? 'active' : '' }}">Booking</a></li>
-                <li><a href="{{ route('portfolio.index') }}"
-                        class="{{ request()->routeIs('portfolio.index') ? 'active' : '' }}">Portofolio</a></li>
+                <li><a href="{{ route('portofolio.guest') }}"
+                        class="{{ request()->routeIs('portofolio.guest') ? 'active' : '' }}">Portofolio</a></li>
                 {{-- @if (Route::has('login'))
                     @auth
                         <li><a href="{{ route('collections.index') }}"

@@ -20,7 +20,7 @@ Route::redirect('/', '/home', 301);
 Route::get('/home', [HomeController::class, 'search'])->name('home.index');
 Route::get('/search', [HomeController::class, 'search'])->name('home.search');
 
-Route::get('/portofolio', [PortfolioController::class, 'index'])->name('portfolio.index');
+Route::get('/portofolio', [PortfolioController::class, 'guest'])->name('portofolio.guest');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
@@ -46,6 +46,8 @@ Route::middleware(['auth', RoleCheck::class.':admin'])->group(function () {
     Route::get('/booking-list', [BookingController::class, 'bookingList'])->name('booking.list');
     Route::get('/booking/events', [BookingController::class, 'bookingEvents'])->name('booking.events');
     Route::post('/booking-list/{id}', [BookingController::class, 'update'])->name('booking.update');
+
+    Route::resource('/portfolio', PortfolioController::class);
 });
 
 Route::middleware(['auth', RoleCheck::class.':admin,user'])->group(function () {
