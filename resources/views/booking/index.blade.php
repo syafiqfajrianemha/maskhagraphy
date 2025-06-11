@@ -15,7 +15,8 @@
                     <h2 class="h4 fw-bold mb-3">Daftar Booking Kamu</h2>
                     @forelse ($bookings as $booking)
                         @php
-                            $servicePrice = $booking->service->price;
+                            $normalPrice = $booking->service->price;
+                            $servicePrice = $normalPrice * 0.5; // DP 50%
                             $snapToken = null;
 
                             if ($servicePrice >= 0.01) {
@@ -42,6 +43,7 @@
                         <div class="card mb-3">
                             <div class="card-body">
                                 <p><strong>Layanan:</strong> {{ $booking->service->name }}</p>
+                                <p><strong>Harga:</strong> Rp. {{ number_format($booking->service->price, 0,'.','.') }}</p>
                                 <p><strong>Tanggal:</strong> {{ \Carbon\Carbon::parse($booking->booking_date)->format('d M Y') }}</p>
                                 <p><strong>Waktu:</strong> {{ \Carbon\Carbon::parse($booking->start_time)->format('H:i') }} - {{ \Carbon\Carbon::parse($booking->end_time)->format('H:i') }}</p>
                                 <p><strong>Lokasi:</strong> {{ $booking->location }}</p>
@@ -60,6 +62,7 @@
                                 @endif
 
                                 @if ($booking->status == 'approved' && $booking->approved_at && now()->diffInMinutes($booking->approved_at) <= 60 && $booking->payment == 'pending')
+                                    <p class="m-0 p-0">Silahkan lakukan pembayaran DP terlebih dahulu. DP 50% dari harga normal.</p>
                                     @if ($snapToken)
                                         <button
                                             id="pay-button-{{ $booking->id }}"

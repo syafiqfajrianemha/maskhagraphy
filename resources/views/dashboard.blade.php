@@ -76,9 +76,7 @@
                         <canvas id="bookingChart" height="100"></canvas>
                     </div>
 
-                    {{-- Daftar Produk --}}
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        {{-- Produk Tersedia --}}
+                    {{-- <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div class="bg-white border rounded shadow p-4">
                             <h2 class="text-lg font-semibold mb-2">Produk Tersedia</h2>
                             @if ($availableProducts->count())
@@ -95,7 +93,6 @@
                             @endif
                         </div>
 
-                        {{-- Produk Terjual --}}
                         <div class="bg-white border rounded shadow p-4">
                             <h2 class="text-lg font-semibold mb-2">Produk Terjual</h2>
                             @if ($soldProducts->count())
@@ -111,7 +108,7 @@
                                 <p class="text-gray-500">Belum ada produk terjual.</p>
                             @endif
                         </div>
-                    </div>
+                    </div> --}}
 
                 </div>
             </div>
