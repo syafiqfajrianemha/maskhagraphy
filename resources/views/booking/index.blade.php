@@ -15,29 +15,43 @@
                     <h2 class="h4 fw-bold mb-3">Daftar Booking Kamu</h2>
                     @forelse ($bookings as $booking)
                         @php
-                            $normalPrice = $booking->service->price;
-                            $servicePrice = $normalPrice * 0.5; // DP 50%
-                            $snapToken = null;
+                            $fullPrice = $booking->service->price;
+                            $dpPrice = $fullPrice * 0.5;
 
-                            if ($servicePrice >= 0.01) {
-                                \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
-                                \Midtrans\Config::$isProduction = false;
-                                \Midtrans\Config::$isSanitized = true;
-                                \Midtrans\Config::$is3ds = true;
+                            \sleep(1); // biar order_id tidak sama
+                            \srand(); // jaga-jaga
 
-                                $params = [
-                                    'transaction_details' => [
-                                        'order_id' => 'ORDER-' . $booking->id . '-' . Str::random(5),
-                                        'gross_amount' => $servicePrice,
-                                    ],
-                                    'customer_details' => [
-                                        'first_name' => auth()->user()->name,
-                                        'email' => auth()->user()->email,
-                                    ],
-                                ];
+                            // Konfigurasi Midtrans
+                            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+                            \Midtrans\Config::$isProduction = false;
+                            \Midtrans\Config::$isSanitized = true;
+                            \Midtrans\Config::$is3ds = true;
 
-                                $snapToken = \Midtrans\Snap::getSnapToken($params);
-                            }
+                            // SnapToken untuk DP
+                            $paramsDp = [
+                                'transaction_details' => [
+                                    'order_id' => 'ORDER-DP-' . $booking->id . '-' . Str::random(5),
+                                    'gross_amount' => $dpPrice,
+                                ],
+                                'customer_details' => [
+                                    'first_name' => auth()->user()->name,
+                                    'email' => auth()->user()->email,
+                                ],
+                            ];
+                            $snapTokenDp = \Midtrans\Snap::getSnapToken($paramsDp);
+
+                            // SnapToken untuk Full
+                            $paramsFull = [
+                                'transaction_details' => [
+                                    'order_id' => 'ORDER-FULL-' . $booking->id . '-' . Str::random(5),
+                                    'gross_amount' => $fullPrice,
+                                ],
+                                'customer_details' => [
+                                    'first_name' => auth()->user()->name,
+                                    'email' => auth()->user()->email,
+                                ],
+                            ];
+                            $snapTokenFull = \Midtrans\Snap::getSnapToken($paramsFull);
                         @endphp
 
                         <div class="card mb-3">
@@ -61,16 +75,41 @@
                                     <p><strong>Payment:</strong> {{ $booking->payment }}</p>
                                 @endif
 
+                                {{-- Radio Pilihan Pembayaran --}}
                                 @if ($booking->status == 'approved' && $booking->approved_at && now()->diffInMinutes($booking->approved_at) <= 60 && $booking->payment == 'pending')
-                                    <p class="m-0 p-0">Silahkan lakukan pembayaran DP terlebih dahulu. DP 50% dari harga normal.</p>
-                                    @if ($snapToken)
+                                    <div class="pembayarannn">
+                                        <p class="m-0 p-0">Pilih metode pembayaran:</p>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input payment-option" type="radio"
+                                                name="payment_option_{{ $booking->id }}" id="dpOption_{{ $booking->id }}"
+                                                data-price="{{ $dpPrice }}" checked>
+                                            <label class="form-check-label" for="dpOption_{{ $booking->id }}">
+                                                Bayar DP 50% (Rp {{ number_format($dpPrice, 0, '.', '.') }})
+                                            </label>
+                                        </div>
+
+                                        <div class="form-check">
+                                            <input class="form-check-input payment-option" type="radio"
+                                                name="payment_option_{{ $booking->id }}" id="fullOption_{{ $booking->id }}"
+                                                data-price="{{ $fullPrice }}">
+                                            <label class="form-check-label" for="fullOption_{{ $booking->id }}">
+                                                Bayar Full (Rp {{ number_format($fullPrice, 0, '.', '.') }})
+                                            </label>
+                                        </div>
+                                    </div>
+
+                                    @if ($snapTokenDp && $snapTokenFull)
                                         <button
                                             id="pay-button-{{ $booking->id }}"
-                                            class="btn btn-primary btn-sm mt-2"
-                                            data-snap-token="{{ $snapToken }}"
+                                            class="btn btn-primary btn-sm mt-2 pay-button"
+                                            data-snap-token-dp="{{ $snapTokenDp }}"
+                                            data-snap-token-full="{{ $snapTokenFull }}"
+                                            data-current-token="{{ $snapTokenDp }}"
                                             data-booking-id="{{ $booking->id }}"
                                         >Bayar Sekarang</button>
                                     @endif
+
                                     <p id="countdown-{{ $booking->id }}" class="text-danger small mt-1"></p>
                                 @endif
 
@@ -149,6 +188,25 @@
         @if (isset($booking))
         <script>
             document.addEventListener('DOMContentLoaded', function () {
+                document.querySelectorAll('.payment-option').forEach(function (radio) {
+                    radio.addEventListener('change', function () {
+                        const bookingId = this.name.replace('payment_option_', '');
+                        const selectedPrice = this.dataset.price;
+
+                        const payBtn = document.querySelector('#pay-button-' + bookingId);
+                        if (payBtn) {
+                            payBtn.innerText = 'Bayar Rp ' + parseInt(selectedPrice).toLocaleString('id-ID');
+
+                            // Ganti Snap Token berdasarkan pilihan
+                            if (this.id.includes('dpOption')) {
+                                payBtn.dataset.currentToken = payBtn.dataset.snapTokenDp;
+                            } else {
+                                payBtn.dataset.currentToken = payBtn.dataset.snapTokenFull;
+                            }
+                        }
+                    });
+                });
+
                 @foreach ($bookings as $booking)
                     @if ($booking->status == 'approved' && $booking->payment == 'pending')
                         (function () {
@@ -179,7 +237,7 @@
 
                 document.querySelectorAll('button[id^="pay-button-"]').forEach(function (button) {
                     button.addEventListener('click', function () {
-                        let snapToken = this.dataset.snapToken;
+                        let snapToken = this.dataset.currentToken;
                         let bookingId = this.dataset.bookingId;
 
                         window.snap.pay(snapToken, {

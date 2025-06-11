@@ -12,12 +12,12 @@
 
                     {{-- Ringkasan Statistik --}}
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                        <div class="bg-green-100 p-4 rounded shadow">
+                        {{-- <div class="bg-green-100 p-4 rounded shadow">
                             <h3 class="text-lg font-bold">Total Pendapatan Potensial</h3>
                             <p class="text-2xl font-semibold text-green-700">
                                 Rp. {{ number_format($totalPotentialRevenue, 0, ',', '.') }}
                             </p>
-                        </div>
+                        </div> --}}
 
                         <div class="bg-blue-100 p-4 rounded shadow">
                             <h3 class="text-lg font-bold">Total Pendapatan Terealisasi</h3>
