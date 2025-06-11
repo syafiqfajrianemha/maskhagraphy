@@ -23,6 +23,8 @@
     <link href="{{ asset('guest/glightbox/css/glightbox.min.css') }}" rel="stylesheet">
     <link href="{{ asset('guest/swiper/swiper-bundle.min.css') }}" rel="stylesheet">
     <link href="{{ asset('guest/css/main.css') }}" rel="stylesheet">
+
+    @stack('style')
 </head>
 
 <body class="index-page">
@@ -48,6 +50,8 @@
     <script src="{{ asset('guest/isotope-layout/isotope.pkgd.min.js') }}"></script>
     <script src="{{ asset('guest/swiper/swiper-bundle.min.js') }}"></script>
     <script src="{{ asset('guest/js/main.js') }}"></script>
+
+    @stack('script')
 </body>
 
 </html>
