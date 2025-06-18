@@ -20,6 +20,9 @@ Route::redirect('/', '/home', 301);
 Route::get('/home', [HomeController::class, 'search'])->name('home.index');
 Route::get('/search', [HomeController::class, 'search'])->name('home.search');
 
+Route::get('/more-photos/{category}', [HomeController::class, 'detailByCategory'])->name('more.photos');
+Route::get('/about', [HomeController::class, 'about'])->name('about');
+
 Route::get('/portofolio', [PortfolioController::class, 'guest'])->name('portofolio.guest');
 
 // Route::get('/dashboard', function () {

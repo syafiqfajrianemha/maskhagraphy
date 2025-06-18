@@ -131,10 +131,10 @@
 
                         <div class="mb-3">
                             <label for="service_id" class="form-label">Layanan</label>
-                            <select class="form-select" name="service_id" id="service_id" required>
-                                <option disabled selected>-- Pilih Layanan --</option>
+                            <select class="form-control" name="service_id" id="service_id" required>
+                                <option disabled selected class="text-dark">-- Pilih Layanan --</option>
                                 @foreach($services as $service)
-                                    <option value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
+                                    <option class="text-dark" value="{{ $service->id }}" {{ old('service_id') == $service->id ? 'selected' : '' }}>
                                         {{ $service->name }} - Rp{{ number_format($service->price) }}
                                     </option>
                                 @endforeach

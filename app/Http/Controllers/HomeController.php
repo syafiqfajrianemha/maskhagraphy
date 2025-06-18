@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Portfolio;
 use App\Models\Product;
 use App\Models\Service;
 use Illuminate\Http\Request;
@@ -28,5 +29,21 @@ class HomeController extends Controller
         }
 
         return view('home.index', compact('products', 'services'));
+    }
+
+    public function detailByCategory($categoryName)
+    {
+        $category = $categoryName;
+        if ($categoryName == 'all') {
+            $portfolios = Portfolio::latest()->get();
+        } else {
+            $portfolios = Portfolio::where('category', $categoryName)->get();
+        }
+        return view('home.more-photos', compact('portfolios', 'category'));
+    }
+
+    public function about()
+    {
+        return view('home.about');
     }
 }
