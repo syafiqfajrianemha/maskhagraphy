@@ -1,28 +1,47 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Register</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <link href="{{ asset('images/favicon.png') }}" rel="icon">
 
-    <title>Register</title>
+  <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@400;700&family=Roboto+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ asset('new/fonts/icomoon/style.css') }}">
+
+  <link rel="stylesheet" href="{{ asset('new/css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('new/css/magnific-popup.css') }}">
+  <link rel="stylesheet" href="{{ asset('new/css/jquery-ui.css') }}">
+  <link rel="stylesheet" href="{{ asset('new/css/owl.carousel.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('new/css/owl.theme.default.min.css') }}">
+
+  <link rel="stylesheet" href="{{ asset('new/css/lightgallery.min.css') }}">
+
+  <link rel="stylesheet" href="{{ asset('new/css/bootstrap-datepicker.css') }}">
+
+  <link rel="stylesheet" href="{{ asset('new/fonts/flaticon/font/flaticon.css') }}">
+
+  <link rel="stylesheet" href="{{ asset('new/css/swiper.css') }}">
+
+  <link rel="stylesheet" href="{{ asset('new/css/aos.css') }}">
+
+  <link rel="stylesheet" href="{{ asset('new/css/style.css') }}">
+
 </head>
-
 <body>
-    <section class="vh-100" style="background-color: #fff;">
+
+    <section class="vh-100">
         <div class="container py-5 h-100">
             <div class="row d-flex justify-content-center align-items-center h-100">
                 <div class="col col-xl-10">
                     <div class="card shadow" style="border-radius: 1rem;">
                         <div class="row g-0">
-                            <div class="col-md-6 col-lg-5 d-none d-md-block">
+                            <div class="col-md-6 col-lg-5 d-none d-md-block"> <!-- Atur tinggi sesuai kebutuhan -->
                                 <img src="{{ asset('images/register.jpeg') }}"
-                                    alt="login form" class="img-fluid" style="border-radius: 1rem 0 0 1rem;" />
+                                    alt="login form"
+                                    class="img-fluid h-100 w-100"
+                                    style="border-radius: 1rem 0 0 1rem; object-fit: cover; object-position: center;" />
                             </div>
                             <div class="col-md-6 col-lg-7 d-flex align-items-center">
                                 <div class="card-body p-4 p-lg-5 text-black">
@@ -34,25 +53,25 @@
                                         <div data-mdb-input-init class="form-outline mb-4">
                                             <label class="form-label" for="form2Example17">Name</label>
                                             <input type="text" id="form2Example17" name="name"
-                                                class="form-control form-control-lg" />
+                                                class="form-control form-control-lg" style="color: #000 !important" />
                                         </div>
 
                                         <div data-mdb-input-init class="form-outline mb-4">
                                             <label class="form-label" for="form2Example17">Email Address</label>
                                             <input type="email" id="form2Example17" name="email"
-                                                class="form-control form-control-lg" />
+                                                class="form-control form-control-lg" style="color: #000 !important" />
                                         </div>
 
                                         <div data-mdb-input-init class="form-outline mb-4">
                                             <label class="form-label" for="form2Example27">Password</label>
                                             <input type="password" id="form2Example27" name="password"
-                                                class="form-control form-control-lg" />
+                                                class="form-control form-control-lg" style="color: #000 !important" />
                                         </div>
 
                                         <div data-mdb-input-init class="form-outline mb-4">
                                             <label class="form-label" for="form2Example27">Confirm Password</label>
                                             <input type="password" id="form2Example27" name="password_confirmation"
-                                                class="form-control form-control-lg" />
+                                                class="form-control form-control-lg" style="color: #000 !important" />
                                         </div>
 
                                         <div class="pt-1 mb-4">
@@ -72,18 +91,30 @@
         </div>
     </section>
 
-    <!-- Optional JavaScript; choose one of the two! -->
+  <script src="{{ asset('new/js/jquery-3.3.1.min.js') }}"></script>
+  <script src="{{ asset('new/js/jquery-migrate-3.0.1.min.js') }}"></script>
+  <script src="{{ asset('new/js/jquery-ui.js') }}"></script>
+  <script src="{{ asset('new/js/popper.min.js') }}"></script>
+  <script src="{{ asset('new/js/bootstrap.min.js') }}"></script>
+  <script src="{{ asset('new/js/owl.carousel.min.js') }}"></script>
+  <script src="{{ asset('new/js/jquery.stellar.min.js') }}"></script>
+  <script src="{{ asset('new/js/jquery.countdown.min.js') }}"></script>
+  <script src="{{ asset('new/js/jquery.magnific-popup.min.js') }}"></script>
+  <script src="{{ asset('new/js/bootstrap-datepicker.min.js') }}"></script>
+  <script src="{{ asset('new/js/swiper.min.js') }}"></script>
+  <script src="{{ asset('new/js/aos.js') }}"></script>
 
-    <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous">
-    </script>
+  <script src="{{ asset('new/js/picturefill.min.js') }}"></script>
+  <script src="{{ asset('new/js/lightgallery-all.min.js') }}"></script>
+  <script src="{{ asset('new/js/jquery.mousewheel.min.js') }}"></script>
 
-    <!-- Option 2: Separate Popper and Bootstrap JS -->
-    <!--
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    -->
+  <script src="{{ asset('new/js/main.js') }}"></script>
+
+  <script>
+    $(document).ready(function(){
+      $('#lightgallery').lightGallery();
+    });
+  </script>
+
 </body>
-
 </html>

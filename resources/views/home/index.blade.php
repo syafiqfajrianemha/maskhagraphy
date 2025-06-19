@@ -8,7 +8,7 @@
               <h2 class="mb-3">Product</h2>
               <a href="{{ route('more.photos', 'product') }}" class="btn btn-outline-white py-2 px-4">More Photos</a>
             </div>
-            <img src="new/images/img_1.jpg" alt="Image" class="img-fluid">
+            <img src="{{ asset('images/product.jpg') }}" alt="Image" class="img-fluid">
           </div>
 
         </div>
@@ -27,7 +27,7 @@
               <h2 class="mb-3">Event</h2>
               <a href="{{ route('more.photos', 'event') }}" class="btn btn-outline-white py-2 px-4">More Photos</a>
             </div>
-            <img src="new/images/img_3.jpg" alt="Image" class="img-fluid">
+            <img src="{{ asset('images/event.jpg') }}" alt="Image" class="img-fluid">
           </div>
         </div>
 
@@ -37,7 +37,7 @@
               <h2 class="mb-3">Engagement</h2>
               <a href="{{ route('more.photos', 'engagement') }}" class="btn btn-outline-white py-2 px-4">More Photos</a>
             </div>
-            <img src="new/images/img_4.jpg" alt="Image" class="img-fluid">
+            <img src="{{ asset('images/engagement.jpg') }}" alt="Image" class="img-fluid">
           </div>
         </div>
 
@@ -47,7 +47,7 @@
               <h2 class="mb-3">Birthday</h2>
               <a href="{{ route('more.photos', 'birthday') }}" class="btn btn-outline-white py-2 px-4">More Photos</a>
             </div>
-            <img src="new/images/img_5.jpg" alt="Image" class="img-fluid">
+            <img src="{{ asset('images/birthday.jpg') }}" alt="Image" class="img-fluid">
           </div>
         </div>
 
@@ -57,7 +57,7 @@
               <h2 class="mb-3">Sports</h2>
               <a href="{{ route('more.photos', 'sports') }}" class="btn btn-outline-white py-2 px-4">More Photos</a>
             </div>
-            <img src="new/images/img_6.jpg" alt="Image" class="img-fluid">
+            <img src="{{ asset('images/sport.jpg') }}" alt="Image" class="img-fluid">
           </div>
         </div>
 
@@ -77,7 +77,7 @@
               <h2 class="mb-3">Wedding</h2>
               <a href="{{ route('more.photos', 'wedding') }}" class="btn btn-outline-white py-2 px-4">More Photos</a>
             </div>
-            <img src="new/images/img_3.jpg" alt="Image" class="img-fluid">
+            <img src="{{ asset('images/wedding.jpg') }}" alt="Image" class="img-fluid">
           </div>
         </div>
 
@@ -87,7 +87,7 @@
               <h2 class="mb-3">Family</h2>
               <a href="{{ route('more.photos', 'family') }}" class="btn btn-outline-white py-2 px-4">More Photos</a>
             </div>
-            <img src="new/images/img_4.jpg" alt="Image" class="img-fluid">
+            <img src="{{ asset('images/family.jpg') }}" alt="Image" class="img-fluid">
           </div>
         </div>
 
