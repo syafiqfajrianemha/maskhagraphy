@@ -1,4 +1,24 @@
 <x-guest-layout>
+    @push('style')
+        <style>
+            .image-wrap-2 {
+                width: 100%;
+                height: 600px; /* Ganti sesuai kebutuhan (misal: 250px, 350px, dsb) */
+                position: relative;
+                overflow: hidden;
+                /* border-radius: 16px; */
+                box-shadow: 0 4px 8px rgba(0,0,0,0.1); /* Opsional */
+            }
+
+            .image-wrap-2 img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                object-position: center;
+                display: block;
+            }
+        </style>
+    @endpush
     <div class="container-fluid" data-aos="fade" data-aos-delay="500">
       <div class="row">
         <div class="col-lg-4">

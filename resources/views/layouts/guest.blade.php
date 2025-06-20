@@ -86,6 +86,7 @@
 
   <link rel="stylesheet" href="{{ asset('new/css/style.css') }}">
 
+  @stack('style')
 </head>
 <body>
 
