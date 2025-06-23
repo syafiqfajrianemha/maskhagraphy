@@ -38,7 +38,7 @@
               <h2 class="mb-3">Portrait</h2>
               <a href="{{ route('more.photos', 'potrait') }}" class="btn btn-outline-white py-2 px-4">More Photos</a>
             </div>
-            <img src="new/images/img_2.jpg" alt="Image" class="img-fluid">
+            <img src="{{ asset('images/potrait.jpg') }}" alt="Image" class="img-fluid">
           </div>
         </div>
         <div class="col-lg-4">
@@ -87,7 +87,7 @@
               <h2 class="mb-3">Prewedding</h2>
               <a href="{{ route('more.photos', 'prewedding') }}" class="btn btn-outline-white py-2 px-4">More Photos</a>
             </div>
-            <img src="new/images/img_7.jpg" alt="Image" class="img-fluid">
+            <img src="{{ asset('images/prewedding.jpg') }}" alt="Image" class="img-fluid">
           </div>
         </div>
 
