@@ -27,8 +27,11 @@
                                 <option value="engagement" @if ($portfolio->category == 'engagement') selected @endif>engagement</option>
                                 <option value="prewedding" @if ($portfolio->category == 'prewedding') selected @endif>prewedding</option>
                                 <option value="wedding" @if ($portfolio->category == 'wedding') selected @endif>wedding</option>
-                                <option value="family" @if ($portfolio->category == 'family') selected @endif>family</option>
                                 <option value="product" @if ($portfolio->category == 'product') selected @endif>product</option>
+                                <option value="family" @if ($portfolio->category == 'family') selected @endif>family</option>
+                                <option value="sports" @if ($portfolio->category == 'sports') selected @endif>sports</option>
+                                <option value="event" @if ($portfolio->category == 'event') selected @endif>event</option>
+                                <option value="birthday" @if ($portfolio->category == 'birthday') selected @endif>birthday</option>
                             </select>
                             <x-input-error class="text-danger mt-1" :messages="$errors->get('category')" />
                         </div>

@@ -26,8 +26,11 @@
                                 <option value="engagement">engagement</option>
                                 <option value="prewedding">prewedding</option>
                                 <option value="wedding">wedding</option>
-                                <option value="family">family</option>
                                 <option value="product">product</option>
+                                <option value="family">family</option>
+                                <option value="sports">sports</option>
+                                <option value="event">event</option>
+                                <option value="birthday">birthday</option>
                             </select>
                             <x-input-error class="text-danger mt-1" :messages="$errors->get('category')" />
                         </div>
